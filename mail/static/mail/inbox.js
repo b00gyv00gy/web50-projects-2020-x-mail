@@ -43,14 +43,19 @@ function load_mailbox(mailbox) {
       newTable.className = 'container';
       document.querySelector('#emails-view').appendChild(newTable);
       for (i=0; i<emails.length; i++ ){
+        
         const newRow = document.createElement('div');
         newRow.className = 'row';
         newRow.style.border = 'solid 1px'
         newRow.style.marginBottom = '5px';
-        if (emails[i].read){
-          newRow.style.backgroundColor = 'gray'
-        }
+        
+          if (emails[i].read){
+            newRow.style.backgroundColor = 'gray'
+          }
+        
         newTable.appendChild(newRow);
+        newRow.addEventListener('click', view_email(emails[i].id));
+
         const sender_col = document.createElement('div');
         sender_col.className = 'col';
         sender_col.innerHTML = emails[i].sender;
@@ -82,5 +87,16 @@ function send_email() {
   .then(result => {
       // Print result
       console.log(result);
+  });
+}
+
+function view_email(id) {
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+      // Print email
+      console.log(email);
+
+    // ... do something else with email ...
   });
 }
