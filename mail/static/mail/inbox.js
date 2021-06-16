@@ -39,10 +39,30 @@ function load_mailbox(mailbox) {
       console.log(emails);
 
       // ... do something else with emails ...
+      const newTable = document.createElement('div');
+      newTable.className = 'container';
+      document.querySelector('#emails-view').appendChild(newTable);
       for (i=0; i<emails.length; i++ ){
-        const newDiv = document.createElement('div');
-        newDiv.innerHTML = emails[i].timestamp;
-        document.querySelector('#emails-view').appendChild(newDiv);
+        const newRow = document.createElement('div');
+        newRow.className = 'row';
+        newRow.style.border = 'solid 1px'
+        newRow.style.marginBottom = '5px';
+        if (emails[i].read){
+          newRow.style.backgroundColor = 'gray'
+        }
+        newTable.appendChild(newRow);
+        const sender_col = document.createElement('div');
+        sender_col.className = 'col';
+        sender_col.innerHTML = emails[i].sender;
+        newRow.appendChild(sender_col);
+        const subject_col = document.createElement('div');
+        subject_col.className = 'col';
+        subject_col.innerHTML = emails[i].subject;
+        newRow.appendChild(subject_col);
+        const time_col = document.createElement('div');
+        time_col.className = 'col';
+        time_col.innerHTML = emails[i].timestamp;
+        newRow.appendChild(time_col);
       };  
   });
   
