@@ -36,8 +36,7 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
       // Print emails
-      console.log(emails);
-
+      //console.log(emails);
       // ... do something else with emails ...
       const newTable = document.createElement('div');
       newTable.className = 'container';
@@ -45,8 +44,10 @@ function load_mailbox(mailbox) {
       for (i=0; i<emails.length; i++ ){
         
         const newRow = document.createElement('div');
+        //newRow.id = 'email';
         newRow.className = 'row';
-        newRow.style.border = 'solid 1px'
+        newRow.style.cursor = 'pointer';
+        newRow.style.border = 'solid 1px';
         newRow.style.marginBottom = '5px';
         
           if (emails[i].read){
@@ -54,8 +55,9 @@ function load_mailbox(mailbox) {
           }
         
         newTable.appendChild(newRow);
-        newRow.addEventListener('click', view_email(emails[i].id));
-
+        const email_id = emails[i].id;
+        newRow.addEventListener('click', () => view_email(email_id));
+        
         const sender_col = document.createElement('div');
         sender_col.className = 'col';
         sender_col.innerHTML = emails[i].sender;
@@ -90,8 +92,8 @@ function send_email() {
   });
 }
 
-function view_email(id) {
-  fetch(`/emails/${id}`)
+function view_email(email_id) {
+  fetch(`/emails/${email_id}`)
   .then(response => response.json())
   .then(email => {
       // Print email
