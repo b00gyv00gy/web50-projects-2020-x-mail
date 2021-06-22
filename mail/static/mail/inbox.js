@@ -178,9 +178,16 @@ function view_email(email_id) {
       document.querySelector('#compose-view').style.display = 'block';
       document.querySelector('#display-email-view').style.display = 'none';
 
+      // remove RE from subject if exists
+      var subject_str = null;
+      if (email.subject.substr(0,3) != 'Re:'){
+        subject_str = 'Re: '+ email.subject;
+      } else{
+        subject_str = email.subject;
+      }
       // Prefill fields
       document.querySelector('#compose-recipients').value = email.sender;
-      document.querySelector('#compose-subject').value = 'Re: ' + email.subject;
+      document.querySelector('#compose-subject').value = subject_str;
       document.querySelector('#compose-body').value = 'On ' + email.timestamp + " " + email.sender + " wrote: " + email.body;  
     });
   })
