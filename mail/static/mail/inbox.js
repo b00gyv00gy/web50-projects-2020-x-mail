@@ -1,11 +1,12 @@
 var email_view_loaded;
+var mailbox;
 
 document.addEventListener('DOMContentLoaded', function() {
 
   // Use buttons to toggle between views
-  document.querySelector('#inbox').addEventListener('click', () => load_mailbox('inbox'));
-  document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
-  document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
+  document.querySelector('#inbox').addEventListener('click', () => {load_mailbox('inbox'); mailbox='inbox'});
+  document.querySelector('#sent').addEventListener('click', () => {load_mailbox('sent'); mailbox='sent';});
+  document.querySelector('#archived').addEventListener('click', () => {load_mailbox('archive'); mailbox= 'archive';});
   document.querySelector('#compose').addEventListener('click', compose_email);
   document.querySelector('#compose-form').addEventListener('submit', send_email);
   email_view_loaded = document.getElementById('#display-email-view');
@@ -46,6 +47,7 @@ function load_mailbox(mailbox) {
       const newTable = document.createElement('div');
       newTable.className = 'container';
       document.querySelector('#emails-view').appendChild(newTable);
+      
       for (i=0; i<emails.length; i++ ){
         
         const newRow = document.createElement('div');
@@ -53,13 +55,11 @@ function load_mailbox(mailbox) {
         newRow.style.cursor = 'pointer';
         newRow.style.border = 'solid 1px';
         newRow.style.marginBottom = '5px';
-        console.log('white');
+        
           if (emails[i].read){
-            newRow.style.color = 'white';
-            console.log('white');
+            newRow.style.backgroundColor = 'grey';
           } else {
-            newRow.style.color = 'grey';
-            console.log('grey');
+            newRow.style.backgroundColor = 'white';
           }
 
         newTable.appendChild(newRow);
@@ -93,8 +93,8 @@ function load_email_view (){
   document.body.append(newTable);
   const sender = document.createElement('div');
   sender.id = 'sender';
-  const recepients = document.createElement('div');
-  recepients.id = 'recepients';
+  const recipients = document.createElement('div');
+  recipients.id = 'recipients';
   const subject = document.createElement('div');
   subject.id = 'subject';
   const timestamp = document.createElement('div');
@@ -107,7 +107,7 @@ function load_email_view (){
   reply_bttn.id = 'reply_bttn';
   reply_bttn.textContent = 'Reply';
   document.querySelector('#display-email-view').appendChild(sender);
-  document.querySelector('#display-email-view').appendChild(recepients);
+  document.querySelector('#display-email-view').appendChild(recipients);
   document.querySelector('#display-email-view').appendChild(subject);
   document.querySelector('#display-email-view').appendChild(timestamp);
   document.querySelector('#display-email-view').appendChild(body);
@@ -126,6 +126,7 @@ function send_email() {
         body: document.querySelector('#compose-body').value
     })
   })
+  
   .then(response => response.json())
   .then(result => {
       // Print result
@@ -143,15 +144,16 @@ function view_email(email_id) {
   .then(response => response.json())
   .then(email => {
       // Print email
-      console.log(email);
-
+      //console.log(email);
+    
     // ... do something else with email ...
     document.querySelector('#sender').innerHTML = 'Sender: ' + email.sender;
-    document.querySelector('#recepients').innerHTML = 'Recepients: ' + email.recepients;
+    document.querySelector('#recipients').innerHTML = 'Recipients: ' + email.recipients.join(',');
     document.querySelector('#subject').innerHTML = 'Subject: ' + email.subject;
     document.querySelector('#timestamp').innerHTML = 'Timestamp: ' + email.timestamp;
     document.querySelector('#body').innerHTML = 'Body: ' + email.body;
-    if(email.archived){
+    
+    if(mailbox == 'archive' ){
       document.querySelector('#archive_bttn').textContent = 'Unarchive this email';
       document.querySelector('#archive_bttn').addEventListener('click',()=> {
       fetch(`/emails/${email_id}`, {
@@ -160,11 +162,11 @@ function view_email(email_id) {
             archived: false
         })
       });
-      //load_mailbox('inbox');
+      
       document.location.reload();
       })
     }
-    else{
+    if (mailbox == 'inbox'){
       document.querySelector('#archive_bttn').textContent = 'Archive this email';
       document.querySelector('#archive_bttn').addEventListener('click', function() {
       fetch(`/emails/${email_id}`, {
