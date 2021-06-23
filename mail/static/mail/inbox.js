@@ -53,11 +53,15 @@ function load_mailbox(mailbox) {
         newRow.style.cursor = 'pointer';
         newRow.style.border = 'solid 1px';
         newRow.style.marginBottom = '5px';
-        
+        console.log('white');
           if (emails[i].read){
-            newRow.style.backgroundColor = 'gray'
+            newRow.style.color = 'white';
+            console.log('white');
+          } else {
+            newRow.style.color = 'grey';
+            console.log('grey');
           }
-        
+
         newTable.appendChild(newRow);
         const email_id = emails[i].id;
         newRow.id = email_id;
@@ -139,7 +143,7 @@ function view_email(email_id) {
   .then(response => response.json())
   .then(email => {
       // Print email
-      //console.log(email);
+      console.log(email);
 
     // ... do something else with email ...
     document.querySelector('#sender').innerHTML = 'Sender: ' + email.sender;
@@ -195,7 +199,7 @@ function view_email(email_id) {
   fetch(`/emails/${email_id}`, {
     method: 'PUT',
     body: JSON.stringify({
-        read: false
+        read: true
     })
   });
 }
