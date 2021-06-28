@@ -1,4 +1,4 @@
-var email_view_loaded;
+//var email_view_loaded;
 var mailbox_loaded;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -89,7 +89,7 @@ function load_mailbox(mailbox) {
 
 function load_email_view (){
 
-  if(!email_view_loaded){
+  //if(!email_view_loaded){
   //adding html for email view
   const newTable = document.createElement('div');
   newTable.id = 'display-email-view';
@@ -117,7 +117,7 @@ function load_email_view (){
   document.querySelector('#display-email-view').appendChild(body);
   document.querySelector('#display-email-view').appendChild(archive_bttn);
   document.querySelector('#display-email-view').appendChild(reply_bttn);
-  }
+  //}
 }
 
 function send_email() {
@@ -156,7 +156,7 @@ function view_email(email_id) {
     document.querySelector('#subject').innerHTML = 'Subject: ' + email.subject;
     document.querySelector('#timestamp').innerHTML = 'Timestamp: ' + email.timestamp;
     document.querySelector('#body').innerHTML = 'Body: ' + email.body;
-    
+    //console.log(this);
     if(mailbox_loaded == 'archive'){
       document.querySelector('#archive_bttn').style.display = 'block';
       document.querySelector('#archive_bttn').textContent = 'Unarchive this email';
